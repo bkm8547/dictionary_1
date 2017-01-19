@@ -67,7 +67,7 @@ public class VocaController {
         return "successed";
     }
 
-    @RequestMapping(value = "get/{dictionary}/{limit}/{page}", method = RequestMethod.GET)
+    @RequestMapping(value = "{dictionary}/{limit}/{page}", method = RequestMethod.GET)
     @Transactional
     public List get(@PathVariable Long dictionary,@PathVariable int limit,@PathVariable int page) {
         JPAQuery<?> query = new JPAQuery<Void>(em);
