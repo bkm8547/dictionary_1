@@ -6,14 +6,14 @@ import com.dictionary.domain.*;
 import com.dictionary.reposity.*;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Bae on 2017-01-09.
@@ -39,13 +39,14 @@ public class VocaController {
 
     @Transactional
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public Object addVoca(User user, Vocabulary voca, Meaning meaning, Example example, VocaOfUser vocaOfUser, @RequestParam(value = "dic_no") Long no) {
+    public ResponseEntity addVoca(User user, Vocabulary voca, Meaning meaning, Example example, VocaOfUser vocaOfUser, @RequestParam(value = "dic_no") Long no) {
         Set<Meaning> meanings = new HashSet<>();
         Set<Example> examples = new HashSet<>();
         Set<VocaOfUser> vocaOfUsers = new HashSet<>();
         User dbUser=userRepository.findOne(user.getId());
         UserDictionary userDictionary = userDictionaryRepository.findOne(no);
         Vocabulary dbVoca=vocaRepository.findOneByVoca(voca.getVoca());
+        Map map = new HashMap();
         if (dbVoca == null&&dbUser.getPassword().equals(user.getPassword())) {
             voca.setMeanings(meanings);
             voca.setExamples(examples);
@@ -58,13 +59,15 @@ public class VocaController {
             vocaOfUser.setUserDictionary(userDictionary);
             vocaOfUsers.add(vocaOfUser);
             vocaRepository.save(voca);
+            map.put("message","inserted");
+            return new ResponseEntity<>(map, HttpStatus.OK);
         } else {
             vocaOfUser.setVocabulary(dbVoca);
             vocaOfUser.setUserDictionary(userDictionary);
             vocaOfUserRepository.save(vocaOfUser);
-            return "already inserted";
+            map.put("message", "already inserted");
+            return new ResponseEntity<Map>(map, HttpStatus.BAD_REQUEST);
         }
-        return "successed";
     }
 
     @RequestMapping(value = "{dictionary}/{limit}/{page}", method = RequestMethod.GET)
@@ -79,10 +82,16 @@ public class VocaController {
 
     @RequestMapping(value = "remove", method = RequestMethod.POST)
     @Transactional
-    public String remove(User user,@RequestParam("no") Long no) {
-        User dbUser=userRepository.findOne(user.getId());
-        if(dbUser.getPassword().equals(user.getPassword()))
+    public ResponseEntity remove(User user,@RequestParam("no") Long no) {
+        User dbUser = userRepository.findOne(user.getId());
+        Map map = new HashMap();
+        if (dbUser.getPassword().equals(user.getPassword())) {
             vocaOfUserRepository.delete(no);
-        return "deleted";
+            map.put("message", "deleted");
+            return new ResponseEntity<>(map, HttpStatus.OK);
+        } else {
+            map.put("message", "password not correct");
+            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+        }
     }
 }

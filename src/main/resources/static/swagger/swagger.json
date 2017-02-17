@@ -1,0 +1,263 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "dictionary_api",
+        "description": ""
+    },
+    "schemes": [
+        "http"
+    ],
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/user": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "create user"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "formData",
+                        "description": "id",
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "formData",
+                        "description": "password",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/user_delete": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "delete user"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "formData",
+                        "description": "id",
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "formData",
+                        "description": "password",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/dic/{userid}": {
+            "get": {
+                "parameters": [
+                    {
+                        "name": "userid",
+                        "in": "path",
+                        "type": "string",
+                        "description": "userid",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get dictionaries of user"
+                    }
+                }
+            }
+        },
+        "/dic": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "create dictionary of user"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "formData",
+                    "description": "id",
+                    "type": "string"
+                },
+                {
+                    "name": "password",
+                    "in": "formData",
+                    "description": "password",
+                    "type": "string"
+                },
+                {
+                    "name": "name",
+                    "in": "formData",
+                    "description": "dictionary name ex)단어장1",
+                    "type": "string"
+                }
+            ]
+        },
+        "/dic/delete": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "delete dictionary of user"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "formData",
+                    "description": "id",
+                    "type": "string"
+                },
+                {
+                    "name": "password",
+                    "in": "formData",
+                    "description": "password",
+                    "type": "string"
+                },
+                {
+                    "name": "no",
+                    "in": "formData",
+                    "description": "dictionary_no for delete",
+                    "type": "number"
+                }
+            ]
+        },
+        "/voca/add": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "add voca into dictionary of user"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "formData",
+                    "description": "id",
+                    "type": "string"
+                },
+                {
+                    "name": "password",
+                    "in": "formData",
+                    "description": "password",
+                    "type": "string"
+                },
+                {
+                    "name": "voca",
+                    "in": "formData",
+                    "description": "voca",
+                    "type": "string"
+                },
+                {
+                    "name": "voice_url",
+                    "in": "formData",
+                    "description": "voice_url",
+                    "type": "string"
+                },
+                {
+                    "name": "word_class",
+                    "in": "formData",
+                    "description": "word_class",
+                    "type": "string"
+                },
+                {
+                    "name": "voca_meaning",
+                    "in": "formData",
+                    "description": "voca_meaning",
+                    "type": "string"
+                },
+                {
+                    "name": "example_santence",
+                    "in": "formData",
+                    "description": "example_santence",
+                    "type": "string"
+                },
+                {
+                    "name": "example_meaning",
+                    "in": "formData",
+                    "description": "example_meaning",
+                    "type": "string"
+                },
+                {
+                    "name": "dic_no",
+                    "in": "formData",
+                    "description": "dic_no",
+                    "type": "string"
+                }
+            ]
+        },
+        "/voca/{dictionary}/{limit}/{page}": {
+            "get": {
+                "parameters": [
+                    {
+                        "name": "dictionary",
+                        "in": "path",
+                        "type": "number",
+                        "description": "dictionary_no for find",
+                        "required": true
+                    },
+                    {
+                        "name": "limit",
+                        "in": "path",
+                        "type": "number",
+                        "description": "number of voca in page",
+                        "required": true
+                    },
+                    {
+                        "name": "page",
+                        "in": "path",
+                        "type": "number",
+                        "description": "page",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get a number of voca in dictionary"
+                    }
+                }
+            }
+        },
+        "voca/remove": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "remove dictionary of user"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "formData",
+                    "description": "id",
+                    "type": "string"
+                },
+                {
+                    "name": "password",
+                    "in": "formData",
+                    "description": "password",
+                    "type": "string"
+                },
+                {
+                    "name": "no",
+                    "in": "formData",
+                    "description": "no_of_voca",
+                    "type": "number"
+                }
+            ]
+        }
+    }
+}
