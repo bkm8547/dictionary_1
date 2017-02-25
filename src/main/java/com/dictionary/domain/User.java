@@ -22,9 +22,12 @@ public class User {
     @Id
     private  String id;
     private  String password;
+    private  String token;
+    @JsonIgnore
     @Temporal(TemporalType.TIMESTAMP)
     private Date register_date=new Date();
     @Column
+    @JsonIgnore
     @Temporal(TemporalType.TIMESTAMP)
     private  Date modified_date=new Date();
     @JsonIgnore
