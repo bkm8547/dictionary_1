@@ -1,263 +1,339 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "version": "1.0.0",
-        "title": "dictionary_api",
-        "description": ""
-    },
-    "schemes": [
-        "http"
-    ],
-    "host": "localhost:8080",
-    "basePath": "/",
-    "paths": {
-        "/user": {
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "create user"
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "formData",
-                        "description": "id",
-                        "type": "string"
-                    },
-                    {
-                        "name": "password",
-                        "in": "formData",
-                        "description": "password",
-                        "type": "string"
-                    }
-                ]
-            }
-        },
-        "/user_delete": {
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "delete user"
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "formData",
-                        "description": "id",
-                        "type": "string"
-                    },
-                    {
-                        "name": "password",
-                        "in": "formData",
-                        "description": "password",
-                        "type": "string"
-                    }
-                ]
-            }
-        },
-        "/dic/{userid}": {
-            "get": {
-                "parameters": [
-                    {
-                        "name": "userid",
-                        "in": "path",
-                        "type": "string",
-                        "description": "userid",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "get dictionaries of user"
-                    }
-                }
-            }
-        },
-        "/dic": {
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "create dictionary of user"
-                    }
-                }
-            },
-            "parameters": [
-                {
-                    "name": "id",
-                    "in": "formData",
-                    "description": "id",
-                    "type": "string"
-                },
-                {
-                    "name": "password",
-                    "in": "formData",
-                    "description": "password",
-                    "type": "string"
-                },
-                {
-                    "name": "name",
-                    "in": "formData",
-                    "description": "dictionary name ex)단어장1",
-                    "type": "string"
-                }
-            ]
-        },
-        "/dic/delete": {
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "delete dictionary of user"
-                    }
-                }
-            },
-            "parameters": [
-                {
-                    "name": "id",
-                    "in": "formData",
-                    "description": "id",
-                    "type": "string"
-                },
-                {
-                    "name": "password",
-                    "in": "formData",
-                    "description": "password",
-                    "type": "string"
-                },
-                {
-                    "name": "no",
-                    "in": "formData",
-                    "description": "dictionary_no for delete",
-                    "type": "number"
-                }
-            ]
-        },
-        "/voca/add": {
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "add voca into dictionary of user"
-                    }
-                }
-            },
-            "parameters": [
-                {
-                    "name": "id",
-                    "in": "formData",
-                    "description": "id",
-                    "type": "string"
-                },
-                {
-                    "name": "password",
-                    "in": "formData",
-                    "description": "password",
-                    "type": "string"
-                },
-                {
-                    "name": "voca",
-                    "in": "formData",
-                    "description": "voca",
-                    "type": "string"
-                },
-                {
-                    "name": "voice_url",
-                    "in": "formData",
-                    "description": "voice_url",
-                    "type": "string"
-                },
-                {
-                    "name": "word_class",
-                    "in": "formData",
-                    "description": "word_class",
-                    "type": "string"
-                },
-                {
-                    "name": "voca_meaning",
-                    "in": "formData",
-                    "description": "voca_meaning",
-                    "type": "string"
-                },
-                {
-                    "name": "example_santence",
-                    "in": "formData",
-                    "description": "example_santence",
-                    "type": "string"
-                },
-                {
-                    "name": "example_meaning",
-                    "in": "formData",
-                    "description": "example_meaning",
-                    "type": "string"
-                },
-                {
-                    "name": "dic_no",
-                    "in": "formData",
-                    "description": "dic_no",
-                    "type": "string"
-                }
-            ]
-        },
-        "/voca/{dictionary}/{limit}/{page}": {
-            "get": {
-                "parameters": [
-                    {
-                        "name": "dictionary",
-                        "in": "path",
-                        "type": "number",
-                        "description": "dictionary_no for find",
-                        "required": true
-                    },
-                    {
-                        "name": "limit",
-                        "in": "path",
-                        "type": "number",
-                        "description": "number of voca in page",
-                        "required": true
-                    },
-                    {
-                        "name": "page",
-                        "in": "path",
-                        "type": "number",
-                        "description": "page",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "get a number of voca in dictionary"
-                    }
-                }
-            }
-        },
-        "voca/remove": {
-            "post": {
-                "responses": {
-                    "200": {
-                        "description": "remove dictionary of user"
-                    }
-                }
-            },
-            "parameters": [
-                {
-                    "name": "id",
-                    "in": "formData",
-                    "description": "id",
-                    "type": "string"
-                },
-                {
-                    "name": "password",
-                    "in": "formData",
-                    "description": "password",
-                    "type": "string"
-                },
-                {
-                    "name": "no",
-                    "in": "formData",
-                    "description": "no_of_voca",
-                    "type": "number"
-                }
-            ]
-        }
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "dictionary_api",
+    "description": "dictionary_api"
+  },
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
     }
+  },
+  "produces": [
+    "application/json"
+  ],
+  "host": "localhost:8080",
+  "paths": {
+    "/getToken": {
+      "post": {
+        "tags": [
+          "token"
+        ],
+        "summary": "토큰발행",
+        "description": "새로운 토큰을 발급받는다.",
+        "responses": {
+          "200": {
+            "description": "토큰 발급 성공"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "formData",
+            "description": "id",
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "description": "password",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "/authToken": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "토큰 유효성검증 성공"
+          }
+        },
+        "tags": [
+          "token"
+        ],
+        "summary": "토큰검증",
+        "description": "토큰 유효기간 및 일치여부 확인.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "formData",
+            "description": "id",
+            "type": "string"
+          },
+          {
+            "name": "token",
+            "in": "formData",
+            "description": "token",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "responses": {
+          "200": {
+            "description": "계정생성 성공"
+          }
+        },
+        "summary": "계정등록",
+        "description": "id,password로 계정등록.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "formData",
+            "description": "id",
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "description": "password",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "/user/{userid}": {
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "responses": {
+          "200": {
+            "description": "유저삭제"
+          }
+        },
+        "summary": "계정삭제",
+        "description": "계정을 삭제한다.",
+        "parameters": [
+          {
+            "name": "userid",
+            "in": "path",
+            "description": "id",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "/dic/{userid}": {
+      "get": {
+        "tags": [
+          "dictionary"
+        ],
+        "summary": "단어장 조회",
+        "description": "유저가 가지고있는 단어장 목록 조회.",
+        "responses": {
+          "200": {
+            "description": "유저별 단어장 조회 성공"
+          }
+        },
+        "parameters": [
+          {
+            "name": "userid",
+            "in": "path",
+            "type": "string",
+            "description": "userid",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/dic": {
+
+    "post": {
+      "tags": [
+        "dictionary"
+      ],
+      "responses": {
+        "200": {
+          "description": "개인 단어장 생성"
+        }
+      },
+      "summary": "단어장생성",
+      "description": "개인 단어장을 생성한다.",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "formData",
+          "description": "id",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "in": "formData",
+          "description": "dictionary name ex)단어장1",
+          "type": "string"
+        }
+      ]
+    }
+    },
+    "/dic/{userid}/{dicno}": {
+      "delete": {
+        "responses": {
+          "200": {
+            "description": "개인 단어장 삭제"
+          }
+        },
+        "tags": [
+          "dictionary"
+        ],
+        "summary": "단어장 삭제",
+        "description": "개인 단어장 삭제",
+        "parameters": [
+          {
+            "name": "userid",
+            "in": "path",
+            "description": "id",
+            "type": "string"
+          },
+          {
+            "name": "dicno",
+            "in": "path",
+            "description": "dictionary_no for delete",
+            "type": "number"
+          }
+        ]
+      }
+    },
+    "/voca/add": {
+      "post": {
+        "tags": [
+          "voca"
+        ],
+        "responses": {
+          "200": {
+            "description": "단어 등록성공"
+          }
+        },
+        "summary": "단어를 등록",
+        "description": "단어를 등록한다. 중복제거를위해 한번만 등록된다.(전체유저기준)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "formData",
+            "description": "id",
+            "type": "string"
+          },
+          {
+            "name": "voca",
+            "in": "formData",
+            "description": "voca",
+            "type": "string"
+          },
+          {
+            "name": "voice_url",
+            "in": "formData",
+            "description": "voice_url",
+            "type": "string"
+          },
+          {
+            "name": "word_class",
+            "in": "formData",
+            "description": "word_class",
+            "type": "string"
+          },
+          {
+            "name": "voca_meaning",
+            "in": "formData",
+            "description": "voca_meaning",
+            "type": "string"
+          },
+          {
+            "name": "example_santence",
+            "in": "formData",
+            "description": "example_santence",
+            "type": "string"
+          },
+          {
+            "name": "example_meaning",
+            "in": "formData",
+            "description": "example_meaning",
+            "type": "string"
+          },
+          {
+            "name": "dic_no",
+            "in": "formData",
+            "description": "dic_no",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "/voca/{dictionary}/{limit}/{page}": {
+      "get": {
+        "tags": [
+          "voca"
+        ],
+        "summary": "단어조회",
+        "description": "단어목록 조회, 페이지당 개수 및 조회 페이지 지정",
+        "parameters": [
+          {
+            "name": "dictionary",
+            "in": "path",
+            "type": "number",
+            "description": "dictionary_no for find",
+            "required": true
+          },
+          {
+            "name": "limit",
+            "in": "path",
+            "type": "number",
+            "description": "number of voca in page",
+            "required": true
+          },
+          {
+            "name": "page",
+            "in": "path",
+            "type": "number",
+            "description": "page",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "단어목록 조회 성공"
+          }
+        }
+      }
+    },
+    "/voca/remove": {
+      "post": {
+        "tags": [
+          "voca"
+        ],
+        "summary": "단어삭제",
+        "description": "개인 단어장목록에서 단어가 삭제된다.",
+        "responses": {
+          "200": {
+            "description": "개인 단어장 단어 삭제성공"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "formData",
+          "description": "id",
+          "type": "string"
+        },
+        {
+          "name": "no",
+          "in": "formData",
+          "description": "no_of_voca",
+          "type": "number"
+        }
+      ]
+    }
+  }
 }

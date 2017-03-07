@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
@@ -42,16 +43,17 @@ public class VocaController {
 
     @Transactional
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public ResponseEntity addVoca(User user, Vocabulary voca, Meaning meaning, Example example, VocaOfUser vocaOfUser, @RequestParam(value = "dic_no") Long no) throws UnsupportedEncodingException {
+    public ResponseEntity addVoca(HttpServletRequest httpServletRequest, User user, Vocabulary voca, Meaning meaning, Example example, VocaOfUser vocaOfUser, @RequestParam(value = "dic_no") Long no) throws UnsupportedEncodingException {
         Set<Meaning> meanings = new HashSet<>();
         Set<Example> examples = new HashSet<>();
+        String auth=httpServletRequest.getHeader("authorization");
         Set<VocaOfUser> vocaOfUsers = new HashSet<>();
         User dbUser = userRepository.findOne(user.getId());
         UserDictionary userDictionary = userDictionaryRepository.findOne(no);
         Vocabulary dbVoca = vocaRepository.findOneByVoca(voca.getVoca());
         Map map = new HashMap();
         if (dbVoca == null) {
-            if (AuthToken.authToken(user.getId(), user.getToken()) && dbUser.getToken().equals(user.getToken())) {
+            if (AuthToken.authToken(user.getId(), auth) && dbUser.getToken().equals(auth)) {
                 voca.setMeanings(meanings);
                 voca.setExamples(examples);
                 meaning.setVocabulary(voca);
@@ -90,10 +92,11 @@ public class VocaController {
 
     @RequestMapping(value = "remove", method = RequestMethod.POST)
     @Transactional
-    public ResponseEntity remove(User user, @RequestParam("no") Long no) throws UnsupportedEncodingException {
+    public ResponseEntity remove(HttpServletRequest httpServletRequest,User user, @RequestParam("no") Long no) throws UnsupportedEncodingException {
         User dbUser = userRepository.findOne(user.getId());
+        String auth=httpServletRequest.getHeader("authorization");
         Map map = new HashMap();
-        if (AuthToken.authToken(user.getId(), user.getToken()) && dbUser.getToken().equals(user.getToken())&&dbUser.getToken().equals(user.getToken())) {
+        if (AuthToken.authToken(user.getId(), auth) && dbUser.getToken().equals(auth)&&dbUser.getToken().equals(auth)) {
             vocaOfUserRepository.delete(no);
             map.put("message", "deleted");
             return new ResponseEntity<>(map, HttpStatus.OK);

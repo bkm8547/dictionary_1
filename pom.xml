@@ -22,6 +22,16 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
         <querydsl.version>4.0.8</querydsl.version>
     </properties>
     <dependencies>
+        <!--auto restart-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>

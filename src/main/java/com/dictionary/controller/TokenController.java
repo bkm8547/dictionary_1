@@ -29,17 +29,10 @@ public class TokenController {
         User dbUser = userRepository.findOne(user.getId());
         //아이디 비번이 같으면
         if (PassBCrypt.checkPassword(user.getPassword(),dbUser.getPassword())) {
-            try {
-                String token = JWT.create()
-                        .withIssuer(user.getId()).withExpiresAt(new Date(new Date().getTime() + 31536000000L))
-                        .sign(Algorithm.HMAC256("1a2a3"));
-                System.out.println("토큰생성:" + token.toString());
+                String token = AuthToken.getToken(user.getId());
                 dbUser.setToken(token.toString());
                 userRepository.save(dbUser);
                 return dbUser;
-            } catch (JWTCreationException exception) {
-                //Invalid Signing configuration / Couldn't convert Claims.
-            }
         }
         return null;
     }
