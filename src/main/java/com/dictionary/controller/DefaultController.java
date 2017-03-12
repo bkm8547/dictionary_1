@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class DefaultController {
     @RequestMapping("/swagger")
-    public String swagger(){
+    public String swagger() {
         return "redirect:swagger/dist/index.html";
     }
+
+
 }

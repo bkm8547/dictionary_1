@@ -20,57 +20,57 @@
   ],
   "host": "localhost:8080",
   "paths": {
-    "/getToken": {
+    "/token": {
       "post": {
         "tags": [
           "token"
         ],
-        "summary": "토큰발행",
+        "summary": "토큰 발행",
         "description": "새로운 토큰을 발급받는다.",
         "responses": {
           "200": {
             "description": "토큰 발급 성공"
+          },
+          "400": {
+            "description": "토큰 발급 실패,아이디나 패스워드확인 필요"
           }
         },
         "parameters": [
           {
             "name": "id",
             "in": "formData",
-            "description": "id",
+            "description": "생성할ID",
             "type": "string"
           },
           {
             "name": "password",
             "in": "formData",
-            "description": "password",
+            "description": "생성할PASSWORD",
             "type": "string"
           }
         ]
       }
     },
-    "/authToken": {
-      "post": {
+    "/token/verify": {
+      "get": {
         "responses": {
           "200": {
             "description": "토큰 유효성검증 성공"
+          },
+          "400": {
+            "description": "토큰 유효성검증 실패,기간이 만료됬거나 유효하지않은 토큰"
           }
         },
         "tags": [
           "token"
         ],
-        "summary": "토큰검증",
+        "summary": "토큰 검증",
         "description": "토큰 유효기간 및 일치여부 확인.",
         "parameters": [
           {
-            "name": "id",
-            "in": "formData",
-            "description": "id",
-            "type": "string"
-          },
-          {
             "name": "token",
-            "in": "formData",
-            "description": "token",
+            "in": "query",
+            "description": "검증할TOKEN",
             "type": "string"
           }
         ]
@@ -84,9 +84,12 @@
         "responses": {
           "200": {
             "description": "계정생성 성공"
+          },
+          "400": {
+            "description": "계정이 이미존재합니다."
           }
         },
-        "summary": "계정등록",
+        "summary": "계정 등록",
         "description": "id,password로 계정등록.",
         "parameters": [
           {
@@ -102,106 +105,114 @@
             "type": "string"
           }
         ]
-      }
-    },
-    "/user/{userid}": {
+      },
       "delete": {
         "tags": [
           "user"
         ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "유저삭제"
+          },
+          "400": {
+            "description": "유저삭제 실패,토큰 또는 패스워드를 확인하세요."
           }
         },
-        "summary": "계정삭제",
+        "summary": "계정 삭제",
         "description": "계정을 삭제한다.",
         "parameters": [
           {
-            "name": "userid",
-            "in": "path",
-            "description": "id",
-            "type": "string"
-          }
-        ]
-      }
-    },
-    "/dic/{userid}": {
-      "get": {
-        "tags": [
-          "dictionary"
-        ],
-        "summary": "단어장 조회",
-        "description": "유저가 가지고있는 단어장 목록 조회.",
-        "responses": {
-          "200": {
-            "description": "유저별 단어장 조회 성공"
-          }
-        },
-        "parameters": [
-          {
-            "name": "userid",
-            "in": "path",
+            "name": "password",
+            "in": "header",
+            "description": "password",
             "type": "string",
-            "description": "userid",
             "required": true
           }
         ]
       }
     },
     "/dic": {
-
-    "post": {
-      "tags": [
-        "dictionary"
-      ],
-      "responses": {
-        "200": {
-          "description": "개인 단어장 생성"
+      "get": {
+        "tags": [
+          "dictionary"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "단어장 조회",
+        "description": "유저가 가지고있는 단어장 목록 조회",
+        "responses": {
+          "200": {
+            "description": "존재하는 단어장 출력"
+          },
+          "400": {
+            "description": "존재하지 않는 ID,토큰을확인하세요."
+          }
         }
       },
-      "summary": "단어장생성",
-      "description": "개인 단어장을 생성한다.",
-      "parameters": [
-        {
-          "name": "id",
-          "in": "formData",
-          "description": "id",
-          "type": "string"
+      "post": {
+        "tags": [
+          "dictionary"
+        ],
+        "responses": {
+          "200": {
+            "description": "개인 단어장이 생성됨"
+          },
+          "400": {
+            "description": "개인 단어장 실패,ID 또는 TOKEN 틀림"
+          }
         },
-        {
-          "name": "name",
-          "in": "formData",
-          "description": "dictionary name ex)단어장1",
-          "type": "string"
-        }
-      ]
-    }
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "단어장 생성",
+        "description": "개인 단어장을 생성",
+        "parameters": [
+          {
+            "name": "dic_name",
+            "in": "formData",
+            "description": "단어장 이름 ex)단어장1",
+            "type": "string"
+          }
+        ]
+      }
     },
-    "/dic/{userid}/{dicno}": {
+    "/dic/{dic_no}": {
       "delete": {
         "responses": {
           "200": {
-            "description": "개인 단어장 삭제"
+            "description": "개인 단어장 삭제성공"
+          },
+          "400": {
+            "description": "개인 단어장 삭제실패,입력정보를 확인하세요."
           }
         },
         "tags": [
           "dictionary"
         ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "summary": "단어장 삭제",
         "description": "개인 단어장 삭제",
         "parameters": [
           {
-            "name": "userid",
+            "name": "dic_no",
             "in": "path",
-            "description": "id",
-            "type": "string"
-          },
-          {
-            "name": "dicno",
-            "in": "path",
-            "description": "dictionary_no for delete",
-            "type": "number"
+            "description": "단어장식별자 GET)dic/{user_id}에서 출력되는 no값",
+            "type": "integer",
+            "required": true
           }
         ]
       }
@@ -214,126 +225,134 @@
         "responses": {
           "200": {
             "description": "단어 등록성공"
+          },
+          "400": {
+            "description": "단어 등록실패, 입력값이나 토큰을 확인하세요."
           }
         },
-        "summary": "단어를 등록",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "단어 등록",
         "description": "단어를 등록한다. 중복제거를위해 한번만 등록된다.(전체유저기준)",
         "parameters": [
           {
-            "name": "id",
-            "in": "formData",
-            "description": "id",
-            "type": "string"
-          },
-          {
             "name": "voca",
             "in": "formData",
-            "description": "voca",
+            "description": "추가할 단어",
             "type": "string"
           },
           {
             "name": "voice_url",
             "in": "formData",
-            "description": "voice_url",
+            "description": "단어음성 URL",
             "type": "string"
           },
           {
             "name": "word_class",
             "in": "formData",
-            "description": "word_class",
+            "description": "품사",
             "type": "string"
           },
           {
             "name": "voca_meaning",
             "in": "formData",
-            "description": "voca_meaning",
+            "description": "단어 의미",
             "type": "string"
           },
           {
             "name": "example_santence",
             "in": "formData",
-            "description": "example_santence",
+            "description": "예제 문장",
             "type": "string"
           },
           {
             "name": "example_meaning",
             "in": "formData",
-            "description": "example_meaning",
+            "description": "문장 해석",
             "type": "string"
           },
           {
             "name": "dic_no",
             "in": "formData",
-            "description": "dic_no",
-            "type": "string"
+            "description": "추가할 단어장NO GET)/dic 에서 확인",
+            "type": "integer"
           }
         ]
       }
     },
-    "/voca/{dictionary}/{limit}/{page}": {
+    "/voca/{dic_no}/{limit}/{page}": {
       "get": {
         "tags": [
           "voca"
         ],
-        "summary": "단어조회",
+        "summary": "단어 조회",
         "description": "단어목록 조회, 페이지당 개수 및 조회 페이지 지정",
         "parameters": [
           {
-            "name": "dictionary",
+            "name": "dic_no",
             "in": "path",
-            "type": "number",
-            "description": "dictionary_no for find",
+            "type": "integer",
+            "description": "추가할 단어장NO GET)/dic 에서 확인",
             "required": true
           },
           {
             "name": "limit",
             "in": "path",
-            "type": "number",
-            "description": "number of voca in page",
+            "type": "integer",
+            "description": "출력할 단어 개수",
             "required": true
           },
           {
             "name": "page",
             "in": "path",
-            "type": "number",
-            "description": "page",
+            "type": "integer",
+            "description": "출력 단어 개수에따른 페이지 선택",
             "required": true
           }
         ],
         "responses": {
           "200": {
             "description": "단어목록 조회 성공"
+          },
+          "400": {
+            "description": "단어목록 조회 실패,토큰을 확인하세요."
           }
         }
       }
     },
-    "/voca/remove": {
-      "post": {
+    "/voca/{voca_no}": {
+      "delete": {
         "tags": [
           "voca"
         ],
-        "summary": "단어삭제",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "단어 삭제",
         "description": "개인 단어장목록에서 단어가 삭제된다.",
         "responses": {
           "200": {
             "description": "개인 단어장 단어 삭제성공"
+          },
+          "400": {
+            "description": "개인 단어장 단어 삭제실패 토큰이나 voca_no값을 확인하세요."
           }
-        }
-      },
-      "parameters": [
-        {
-          "name": "id",
-          "in": "formData",
-          "description": "id",
-          "type": "string"
         },
-        {
-          "name": "no",
-          "in": "formData",
-          "description": "no_of_voca",
-          "type": "number"
-        }
-      ]
+        "parameters": [
+          {
+            "name": "voca_no",
+            "in": "path",
+            "description": "단어NO GET)/voca/{dictionary}/{limit}/{page} 에서 확인",
+            "type": "integer"
+          ,"required":true
+          }
+        ]
+      }
     }
   }
 }

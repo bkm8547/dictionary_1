@@ -1,20 +1,19 @@
 package com.dictionary.controller;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
 import com.dictionary.domain.User;
-import com.dictionary.reposity.UserRepository;
+import com.dictionary.service.TokenManager;
 import com.dictionary.util.AuthToken;
-import com.dictionary.util.PassBCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Bae on 2017-02-24.
@@ -22,32 +21,35 @@ import java.util.Date;
 @RestController
 public class TokenController {
     @Autowired
-    UserRepository userRepository;
+    TokenManager tokenManager;
 
-    @RequestMapping(value = "getToken", method = RequestMethod.POST)
+
+    @RequestMapping(value = "token", method = RequestMethod.POST)
     public Object getToen(User user) throws UnsupportedEncodingException {
-        User dbUser = userRepository.findOne(user.getId());
+        HashMap<String,Object> map=new HashMap();
+        String token;
         //아이디 비번이 같으면
-        if (PassBCrypt.checkPassword(user.getPassword(),dbUser.getPassword())) {
-                String token = AuthToken.getToken(user.getId());
-                dbUser.setToken(token.toString());
-                userRepository.save(dbUser);
-                return dbUser;
+        token=tokenManager.getToken(user);
+        if(token!=null){
+            map.put("token",token);
+            return new ResponseEntity<>(map, HttpStatus.OK);
         }
-        return null;
+        map.put("message","토큰발행 실패,아이디나 패스워드를 확인하세요.");
+        return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(value = "authToken", method = RequestMethod.POST)
-    public boolean authToken(@Param(value = "id") String id, @Param(value = "token") String token) {
+    @RequestMapping(value = "token/verify", method = RequestMethod.GET)
+    public Object authToken(@RequestParam(value = "token") String token) {
+        Map map=new HashMap();
         try{
-            if(AuthToken.authToken(id, token))
-                return true;
-            else
-                return false;
+            if(token!=null&&AuthToken.authToken(token)) {
+                map.put("message", "true");
+                return new ResponseEntity<>(map, HttpStatus.OK);
+            }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-            return false;
         }
-
+        map.put("message","false");
+        return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
     }
 }
