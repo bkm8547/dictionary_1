@@ -26,8 +26,8 @@ public class DictionaryManager{
         String token = httpServletRequest.getHeader("authorization");
         User dbUser;
         if (token != null && AuthToken.authToken(token)) {
-            user.setId(AuthToken.getUser(token));
-            dbUser = userRepository.findOne(user.getId());
+            user.setEmail(AuthToken.getUser(token));
+            dbUser = userRepository.findOne(user.getEmail());
             if (dbUser.getToken().equals(token)) {
                 userDictionary.setUser(user);
                 userDictionaryRepository.save(userDictionary);
@@ -47,7 +47,7 @@ public class DictionaryManager{
             dbUser = userRepository.findOne(id);
             if (dbUser.getToken().equals(token)) {
                 UserDictionary dbUserDictionary = userDictionaryRepository.findOne(dicNo);
-                if (dbUserDictionary!=null&&dbUserDictionary.getUser().getId().equals(id)) {
+                if (dbUserDictionary!=null&&dbUserDictionary.getUser().getEmail().equals(id)) {
                     userDictionaryRepository.delete(dbUserDictionary);
                     return true;
                 }
@@ -58,7 +58,7 @@ public class DictionaryManager{
 
     public List<UserDictionary> getList(String userId) {
         if (userRepository.findOne(userId) != null) {
-            return userDictionaryRepository.findByUser_id(userId);
+            return userDictionaryRepository.findByUser_email(userId);
         }
         return null;
     }

@@ -1,6 +1,7 @@
 package com.dictionary.controller;
 
 import com.dictionary.domain.User;
+import com.dictionary.reposity.UserRepository;
 import com.dictionary.service.TokenManager;
 import com.dictionary.util.AuthToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import java.util.Map;
 public class TokenController {
     @Autowired
     TokenManager tokenManager;
+    @Autowired
+    UserRepository userRepository;
 
 
     @RequestMapping(value = "token", method = RequestMethod.POST)
@@ -43,13 +46,16 @@ public class TokenController {
         Map map=new HashMap();
         try{
             if(token!=null&&AuthToken.authToken(token)) {
-                map.put("message", "true");
-                return new ResponseEntity<>(map, HttpStatus.OK);
+                User dbUser=userRepository.findOne(AuthToken.getUser(token));
+                if(dbUser!=null&&dbUser.getToken().equals(token)) {
+                    map.put("message", "true");
+                    return new ResponseEntity<>(map, HttpStatus.OK);
+                }
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        map.put("message","false");
+        map.put("message","토큰이잘못되었거나 만료되었습니다.");
         return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
     }
 }

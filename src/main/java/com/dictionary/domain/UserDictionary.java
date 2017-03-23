@@ -8,11 +8,14 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.*;
 import java.util.Set;
 
 /**
  * Created by Bae on 2017-01-09.
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @Entity
 @Getter
 @Setter

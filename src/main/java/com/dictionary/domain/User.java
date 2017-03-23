@@ -20,8 +20,10 @@ import java.util.Set;
 @ToString
 public class User {
     @Id
-    private  String id;
+    private  String email;
+    @JsonIgnore
     private  String password;
+    @JsonIgnore
     private  String token;
     @JsonIgnore
     @Temporal(TemporalType.TIMESTAMP)

@@ -19,10 +19,10 @@ public class TokenManager {
     public String getToken(User user) throws UnsupportedEncodingException {
         User dbUser;
         System.out.println("userre:"+userRepository);
-        if (user.getId() != null && user.getPassword() != null) {
-            dbUser = userRepository.findOne(user.getId());
+        if (user.getEmail() != null && user.getPassword() != null) {
+            dbUser = userRepository.findOne(user.getEmail());
             if (dbUser!=null&&PassBCrypt.checkPassword(user.getPassword(), dbUser.getPassword())) {
-                String token = AuthToken.getToken(user.getId());
+                String token = AuthToken.getToken(user.getEmail());
                 dbUser.setToken(token.toString());
                 userRepository.save(dbUser);
                 return token.toString();

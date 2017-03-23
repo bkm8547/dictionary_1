@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Bae on 2017-03-11.
@@ -17,27 +19,31 @@ import java.io.UnsupportedEncodingException;
 public class UserManager {
     @Autowired
     UserRepository userRepository;
-    public boolean create(User user){
-           if (user.getId() != null && user.getPassword() != null&&userRepository.findOne(user.getId()) == null) {
-                //패스워드 해쉬
-                user.setPassword(PassBCrypt.hash(user.getPassword()));
-                System.out.println(user.getPassword());
-                userRepository.save(user);
-                return true;
-            }
-            return false;
+
+    public boolean create(User user) {
+        String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(user.getEmail());
+        if (user.getEmail() != null && user.getPassword() != null &&m.matches()&& userRepository.findOne(user.getEmail()) == null) {
+            //패스워드 해쉬
+            user.setPassword(PassBCrypt.hash(user.getPassword()));
+            System.out.println(user.getPassword());
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
+
     public boolean delete(HttpServletRequest httpServletRequest) throws UnsupportedEncodingException {
-        String token=httpServletRequest.getHeader("authorization").trim();
-        String id=null;
-        String password=null;
-        if(token!=null&&AuthToken.authToken(token))
-        id = AuthToken.getUser(token);
-        password = httpServletRequest.getHeader("password").trim();
-        if (id!=null&&password!=null) {
-            User user = userRepository.findOne(id);
+        String token = httpServletRequest.getHeader("authorization").trim();
+        String id = null;
+        User user;
+        if (token != null && AuthToken.authToken(token))
+            id = AuthToken.getUser(token);
+        user = userRepository.findOne(id);
+        if (id != null && user != null) {
             //단방향암호화시 해쉬값이매번바뀌모르 brypt에서 제공하는 API사용
-            if (user!=null&&PassBCrypt.checkPassword(password,user.getPassword())) {
+            if (token.equals(user.getToken())) {
                 userRepository.delete(user);
                 return true;
             }

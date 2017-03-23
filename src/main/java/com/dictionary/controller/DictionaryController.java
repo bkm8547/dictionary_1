@@ -7,6 +7,7 @@ import com.dictionary.service.DictionaryManager;
 import com.dictionary.util.AuthToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
@@ -24,9 +25,10 @@ public class DictionaryController {
     @Autowired
     DictionaryManager dictionaryManager;
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @GetMapping(path = "",
+            produces = {"application/json","application/xml"})
     public Object get(HttpServletRequest httpServletRequest) throws UnsupportedEncodingException {
-        Map map=new HashMap();
+        Map map = new HashMap();
         String token = httpServletRequest.getHeader("authorization");
         String user = null;
         System.out.println(token);
@@ -42,8 +44,8 @@ public class DictionaryController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public ResponseEntity add(HttpServletRequest httpServletRequest, User user, @RequestParam(value = "dic_name")String dicName, UserDictionary userDictionary) throws UnsupportedEncodingException {
-        Map map=new HashMap();
+    public ResponseEntity add(HttpServletRequest httpServletRequest, User user, @RequestParam(value = "dic_name") String dicName, UserDictionary userDictionary) throws UnsupportedEncodingException {
+        Map map = new HashMap();
         userDictionary.setName(dicName);
         if (dictionaryManager.add(httpServletRequest, user, userDictionary)) {
             map.put("message", "단어장 생성 성공");
@@ -55,7 +57,7 @@ public class DictionaryController {
 
     @RequestMapping(value = "{dic_no}", method = RequestMethod.DELETE)
     public ResponseEntity delete(HttpServletRequest httpServletRequest, @PathVariable(value = "dic_no") Long dicNo) throws UnsupportedEncodingException {
-        Map map=new HashMap();
+        Map map = new HashMap();
         if (dictionaryManager.delete(httpServletRequest, dicNo)) {
             map.put("message", "단어장 삭제성공");
             return new ResponseEntity(map, HttpStatus.ACCEPTED);

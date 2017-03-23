@@ -10,5 +10,5 @@ import java.util.List;
  */
 
 public interface UserDictionaryRepository extends JpaRepository<UserDictionary, Long> {
-    List<UserDictionary> findByUser_id(String id);
+    List<UserDictionary> findByUser_email(String email);
 }
